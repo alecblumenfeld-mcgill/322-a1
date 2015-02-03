@@ -43,7 +43,6 @@ ContinuedFraction *deepCopy(ContinuedFraction* x )
     while (x->tail != NULL)
     {
         
-        std::cout<<x->head<<'\n';
         ContinuedFraction* copy = new ContinuedFraction;
         copy->head = x->head;
         addLast(Hcopy,copy);
@@ -84,7 +83,6 @@ ContinuedFraction *getCF(unsigned int b, unsigned int a) {
         //get remainder
         int r  = b % a;
         //debug ;)
-        //std::cout<<b << '%'<< a<<"="<<r<<'\n';
         //swap old denomnator for numerator
         b=a;
         //replace old denmoenator with the remander
@@ -93,9 +91,6 @@ ContinuedFraction *getCF(unsigned int b, unsigned int a) {
         //a linked list
         ContinuedFraction *y = getCFlargerThanOne(b, a);
         x->tail = y;
-        
-  
-        
     }
     return head;
 }
