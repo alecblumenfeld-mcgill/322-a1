@@ -16,7 +16,7 @@ using namespace std;
 int main() {
 
     printCF(*(getCF(75, 33)),10);
-
+    
 	// create the golden ratio and print it
 	ContinuedFraction goldenRatio;
 	goldenRatio.head = 1;
@@ -31,7 +31,7 @@ int main() {
 	printCF(*someCF,5);
 
 	// get approximation
-	Fraction testFraction = getApproximation(someCF,2);
+	Fraction testFraction = getApproximation(someCF,5 );
 	cout << "..and its approximation is " << testFraction.numerator << "/" << testFraction.denominator << endl;
 	cout << "The continued fraction of the above approximation is ";
 	//printCF(*getCF(testFraction.numerator, testFraction.denominator),5);

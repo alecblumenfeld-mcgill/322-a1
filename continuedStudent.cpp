@@ -26,6 +26,36 @@ unsigned int gcdFaster(unsigned int a, unsigned int b){
     return a;
     
 }
+//takes two fractions and adds the econd on to he nd of the other
+void addLast(ContinuedFraction* x, ContinuedFraction*y ){
+
+    while (x->tail!=NULL) {
+        x= x->tail;
+    }
+    x->tail = y;
+}
+//preforms a copy that uses all elements in the list
+ContinuedFraction *deepCopy(ContinuedFraction* x )
+{
+    ContinuedFraction* Hcopy = new ContinuedFraction;
+    Hcopy->head = x->head;
+    
+    while (x->tail != NULL)
+    {
+        
+        std::cout<<x->head<<'\n';
+        ContinuedFraction* copy = new ContinuedFraction;
+        copy->head = x->head;
+        addLast(Hcopy,copy);
+        x = x->tail;
+            
+        
+    }
+    return Hcopy;
+   
+}
+
+
 ContinuedFraction *getCFlargerThanOne(unsigned int b, unsigned int a) {
     double x =(double)b/(double)a;
     
@@ -72,17 +102,21 @@ ContinuedFraction *getCF(unsigned int b, unsigned int a) {
 
 
 ContinuedFraction *getCF(unsigned int head, ContinuedFraction *fixed, ContinuedFraction *period) {
+    //creates fraction and gives it head the one passed from the func and gives its tail ficed
     ContinuedFraction *x = new ContinuedFraction;
     x->head= head;
     x->tail = fixed;
-    ContinuedFraction *copy ;
-    copy = (ContinuedFraction*) malloc (sizeof(ContinuedFraction));
-    copy = period;
+    //speffically coppies the fraction--Deep Copy
+    ContinuedFraction *copy;
+    copy = deepCopy(period);
+    
     ContinuedFraction *temp = copy;
     while (temp->tail != NULL) {
         temp = temp->tail;
     }
+    //puts period at end
     temp->tail = copy;
+    //respeifies x
     temp= x;
     while (temp->tail != NULL) {
         temp = temp->tail;
@@ -93,34 +127,41 @@ ContinuedFraction *getCF(unsigned int head, ContinuedFraction *fixed, ContinuedF
 }
 
 
-Fraction getApproximation(ContinuedFraction *fr, unsigned int n) {
-//    std::cout<<fr->head<<'\n';
-//    Fraction *x = new Fraction;
-//    if (fr->tail == NULL || n==0) {
-//        Fraction *y = new Fraction;
-//        y->numerator = 1;
-//        y->denominator= fr->head;
-//        return *y;
-//    }
-//    
-//    *x = getApproximation(fr->tail, n-1);
-//    x->denominator = x->denominator + fr->head;
-//
-    
-    Fraction *x= new Fraction;
-    ContinuedFraction *ptr = new ContinuedFraction;
-    ptr = fr->tail;
-    while(ptr != NULL && n !=0){
-     
-        n-=1;
-        std::cout<<ptr->head<<' ' << n<<'\n';
-        x->denominator += ptr->head;
-        ptr = ptr->tail;
+
+Fraction getApproximationReccursive(ContinuedFraction *fr, unsigned int n) {
+    Fraction *f = new Fraction();
+    Fraction *fp = new Fraction();
+    int de;
+    int num;
+    //basecase
+    if (n==0 || fr->tail==nullptr){
+        f->numerator = 1;
+        f->denominator = fr->head;
+        return *f;
     }
-    x->numerator = 1+ fr->head;
+    //else
+    f->numerator = 1;
+    //recursive step
+    *fp = getApproximationReccursive(fr->tail, n--);
+    //save values
+    de = fp->denominator;
+    num = fp->numerator;
+    //multiplies the numerator by the head and then adds the sumation of the contained fractions"num"
+    fp->denominator = num+(fr->head * fp->denominator);
+    fp->numerator = de;
+
+    return *fp;
+}
+
+
+Fraction getApproximation(ContinuedFraction *fr, unsigned int n) {
+    Fraction *fp = new Fraction();
+    //plugs into recurse
+    *fp = getApproximationReccursive(fr->tail, n-=1);
+    //takes multiplies it by the denominator and adds it to the summation
+    fp->numerator = (fr->head * fp->denominator)+fp->numerator;
     
-    return *x;
-    
+    return *fp;
 }
 
 
